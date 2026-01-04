@@ -19,6 +19,7 @@
     <Folder Include="DTOs\" />
     <Folder Include="Entities\" />
     <Folder Include="RequestHelpers\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
