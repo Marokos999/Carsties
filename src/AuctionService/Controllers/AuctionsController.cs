@@ -5,6 +5,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Contracts;
 using MassTransit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,13 +43,13 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper, IPubli
         return mapper.Map<AuctionDto>(auction);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<AuctionDto>> CreateAuction([FromBody] CreateAuctionDto auctionDto)
     {
         var auction = mapper.Map<Auction>(auctionDto);
 
-        // TODO: add current user as seller
-        auction.Seller = "test";
+        auction.Seller = User.Identity?.Name ?? throw new Exception("User identity not found");
 
         context.Auctions.Add(auction);
 
@@ -64,6 +65,7 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper, IPubli
         return CreatedAtAction(nameof(GetAuction), new { id = auction.Id }, newAuction);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<AuctionDto>> UpdateAuction(Guid id, [FromBody] UpdateAuctionDto auctionDto)
     {
@@ -77,6 +79,7 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper, IPubli
         }
 
         // TODO: check seller is the same as current user
+        if (auction.Seller != User.Identity?.Name) return Forbid();
 
         auction.Item.Make = auctionDto.Make ?? auction.Item.Make;
         auction.Item.Model = auctionDto.Model ?? auction.Item.Model;
@@ -96,6 +99,7 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper, IPubli
         return Ok(mapper.Map<AuctionDto>(auction));
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteAuction(Guid id) 
     {
@@ -106,6 +110,7 @@ public class AuctionsController(AuctionDbContext context, IMapper mapper, IPubli
         }
 
          // TODO: check seller is the same as current user
+        if (auction.Seller != User.Identity?.Name) return Forbid();
         context.Auctions.Remove(auction);
 
         await publishEndpoint.Publish<AuctionDeleted>(new {Id = auction.Id.ToString()});
