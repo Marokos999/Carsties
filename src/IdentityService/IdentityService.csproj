@@ -22,5 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Account\Register\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
