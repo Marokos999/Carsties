@@ -1,3 +1,6 @@
+using System.Net;
+using Polly;
+using Polly.Extensions.Http;
 using SearchService.Data;
 using SearchService.Services;
 
@@ -7,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddHttpClient<AuctionSvcHttpClient>();
+builder.Services.AddHttpClient<AuctionSvcHttpClient>()
+       .AddPolicyHandler(GetRetryPolicy());
 
 
 var app = builder.Build();
@@ -23,16 +27,28 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-try
+app.Lifetime.ApplicationStarted.Register(async() =>
 {
-await DbInitializer.InitDb(app);    
-}
-catch (Exception e)
-{
-   Console.WriteLine("Error initializing database: " + e.Message);
-    throw;
-}
+    try
+        {
+            await DbInitializer.InitDb(app);    
+        }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    
+    }
+});
 
 
 
 app.Run();
+
+
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+{
+    return HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
+        .WaitAndRetryForeverAsync(_ => TimeSpan.FromSeconds(3));
+}
