@@ -23,12 +23,10 @@ public class DbInitializer
             .Key(x => x.Model, KeyType.Text)
                 .Key(x => x.Color, KeyType.Text)
                 .CreateAsync();
+    var count = await db.CountAsync<Item>();
+    using var scope = app.Services.CreateScope();
 
-
-        var count = await db.CountAsync<Item>();
-        using var scope = app.Services.CreateScope();
-
-        var httpClient = scope.ServiceProvider.GetRequiredService<AuctionSvcHttpClient>();
+    var httpClient = scope.ServiceProvider.GetRequiredService<AuctionSvcHttpClient>();
 
         var items = await httpClient.GetItemsForSearchDb();
 

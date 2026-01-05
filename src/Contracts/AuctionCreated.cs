@@ -1,8 +1,6 @@
-using System;
+namespace Contracts;
 
-namespace AuctionService.DTOs;
-
-public class AuctionDto
+public class AuctionCreated
 {
     public Guid Id { get; set; }
     public int ReservePrice { get; set; }
