@@ -1,8 +1,8 @@
-using System;
+using MongoDB.Entities;
 
-namespace AuctionService.DTOs;
+namespace SearchService.Models;
 
-public class AuctionDto
+public class Item : Entity
 {
     public int ReservePrice { get; set; }
     public required string Seller { get; set; }
