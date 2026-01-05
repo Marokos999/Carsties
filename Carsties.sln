@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionService", "src\Aucti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchService", "src\SearchService\SearchService.csproj", "{333C5E81-545E-4466-BD13-89DBF970B336}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "src\Contracts\Contracts.csproj", "{0974C160-6195-4484-A732-31948E0C2BC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,18 @@ Global
 		{333C5E81-545E-4466-BD13-89DBF970B336}.Release|x64.Build.0 = Release|Any CPU
 		{333C5E81-545E-4466-BD13-89DBF970B336}.Release|x86.ActiveCfg = Release|Any CPU
 		{333C5E81-545E-4466-BD13-89DBF970B336}.Release|x86.Build.0 = Release|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Debug|x64.Build.0 = Debug|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Release|x64.ActiveCfg = Release|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Release|x64.Build.0 = Release|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{0974C160-6195-4484-A732-31948E0C2BC7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,5 +64,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9FEA91B2-A7F2-4CED-AE81-F9370F58DA42} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{333C5E81-545E-4466-BD13-89DBF970B336} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{0974C160-6195-4484-A732-31948E0C2BC7} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
