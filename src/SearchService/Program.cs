@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddOpenApi();
 builder.Services.AddHttpClient<AuctionSvcHttpClient>()
                 .AddPolicyHandler(GetRetryPolicy());
@@ -29,6 +30,9 @@ builder.Services.AddMassTransit(x =>
             e.UseMessageRetry(r => r.Interval(5, 5));
 
             e.ConfigureConsumer<AuctionCreatedConsumer>(context);
+            e.ConfigureConsumer<AuctionUpdatedConsumer>(context);
+            e.ConfigureConsumer<AuctionDeletedConsumer>(context);
+
         });
 
         cfg.ConfigureEndpoints(context);
