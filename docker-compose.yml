@@ -54,7 +54,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - RabbitMQ__Host=rabbitmq
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=auctions
-      - IdentityServiceUrl=http://identity-svc
+      - IdentityServerUrl=http://identity-svc
     ports:
       - "7001:80"
     depends_on:
@@ -102,6 +102,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
+      - IdentityServerUrl=http://identity-svc
     ports:
       - "6001:80"
 volumes:
