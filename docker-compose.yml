@@ -7,6 +7,11 @@ services:
       - "5432:5432"
     volumes:
       - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 
   mongodb:
@@ -18,6 +23,20 @@ services:
        - "27017:27017"
      volumes:
        - /data/db
+     healthcheck:
+      test:
+        [
+          "CMD",
+          "mongosh",
+          "--quiet",
+          "127.0.0.1/test",
+          "--eval",
+          "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -39,8 +58,10 @@ services:
     ports:
       - "7001:80"
     depends_on:
-      - postgres
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
   search-svc:
     image: marokos/search-svc:latest
     build: 
@@ -55,8 +76,10 @@ services:
     ports:
       - "7002:80"
     depends_on:
-      - rabbitmq
-      - mongodb
+      rabbitmq:
+        condition: service_started
+      mongodb:
+        condition: service_healthy
   identity-svc:
     image: marokos/identity-svc:latest
     build: 
@@ -69,7 +92,8 @@ services:
     ports:
       - "5000:80"
     depends_on:
-      - postgres
+       postgres:
+        condition: service_healthy
   gateway-svc:
     image: marokos/gateway-svc:latest
     build: 
