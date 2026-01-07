@@ -6,6 +6,8 @@ using Moq;
 using AutoMapper;
 using AuctionService.Controllers;
 using AuctionService.RequestHelpers;
+using AuctionService.Entities;
+using AuctionService.DTOs;
 
 namespace AuctionService.UnitTests;
 
@@ -29,4 +31,20 @@ public class AuctionControllerTests
             _mapper = new Mapper(mockMapper);
             _controller = new AuctionsController(_auctionRepo.Object, _mapper, _publishEndpoint.Object);
         }
+
+    [Fact]
+    public async Task GetAuctions_WithNoParams_Returns10Auctions()
+    {
+        // arrange
+
+        var auction = _fixture.CreateMany<AuctionDto>(10).ToList();
+        _auctionRepo.Setup(repo => repo.GetAuctionsAsync(null)).ReturnsAsync(auction);
+
+        // act
+        var result = await _controller.GetAuctions(null);
+
+        // assert
+        Assert.Equal(10, result.Value.Count);
+        Assert.IsType<List<AuctionDto>>(result.Value);
+    }
 }
