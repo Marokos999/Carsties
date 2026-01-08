@@ -22,7 +22,7 @@ public class AuctionsController(IAuctionRepository auctionRepository, IMapper ma
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<AuctionDto>> GetAuction(Guid id)
+    public async Task<ActionResult<AuctionDto>> GetAuctionById(Guid id)
     {
         var auction = await auctionRepository.GetAuctionByIdAsync(id);
 
@@ -51,7 +51,7 @@ public class AuctionsController(IAuctionRepository auctionRepository, IMapper ma
             return BadRequest("Failed to create auction");
         }
 
-        return CreatedAtAction(nameof(GetAuction), new { id = auction.Id }, newAuction);
+        return CreatedAtAction(nameof(GetAuctionById), new { id = auction.Id }, newAuction);
     }
 
     [Authorize]

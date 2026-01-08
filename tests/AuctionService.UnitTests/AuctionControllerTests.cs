@@ -8,6 +8,7 @@ using AuctionService.Controllers;
 using AuctionService.RequestHelpers;
 using AuctionService.Entities;
 using AuctionService.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionService.UnitTests;
 
@@ -46,5 +47,34 @@ public class AuctionControllerTests
         // assert
         Assert.Equal(10, result.Value.Count);
         Assert.IsType<List<AuctionDto>>(result.Value);
+    }
+
+    [Fact]
+    public async Task GetAuctionsById_WithValidGuid_ReturnsAuctions()
+    {
+        // arrange
+
+        var auction = _fixture.Create<AuctionDto>();
+        _auctionRepo.Setup(repo => repo.GetAuctionByIdAsync(It.IsAny<Guid>())).ReturnsAsync(auction);
+
+        // act
+        var result = await _controller.GetAuctionById(auction.Id);
+
+        // assert
+        Assert.Equal(auction.Make, result.Value.Make);
+        Assert.IsType<AuctionDto>(result.Value);
+    }
+
+    [Fact]
+    public async Task GetAuctionsById_WithInvalidGuid_ReturnsNotFound()
+    {
+        // arrange
+        _auctionRepo.Setup(repo => repo.GetAuctionByIdAsync(It.IsAny<Guid>())).ReturnsAsync(value: null);
+
+        // act
+        var result = await _controller.GetAuctionById(Guid.NewGuid());
+
+        // assert
+        Assert.IsType<NotFoundResult>(result.Result);
     }
 }
