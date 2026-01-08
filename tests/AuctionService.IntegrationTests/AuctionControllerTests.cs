@@ -5,13 +5,15 @@ using AuctionService.Data;
 using Contracts;
 using MassTransit.Testing;
 using AuctionService.DTOs;
+using Xunit;
 using AuctionService.IntegrationTests.Fixtures;
 using AuctionService.IntegrationTests.Util;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AuctionService.IntegrationTests;
 
-public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsyncLifetime
+[Collection("AuctionServiceIntegration")]
+public class AuctionControllerTests : IAsyncLifetime
 {
     private readonly CustomWebAppFactory _factory;
     private readonly HttpClient _client;
