@@ -52,6 +52,25 @@ public class AuctionControllerTests
             _publishEndpoint
                 .Setup(p => p.Publish(It.IsAny<AuctionCreated>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
+
+            _publishEndpoint
+                .Setup(p => p.Publish(It.IsAny<AuctionUpdated>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            _publishEndpoint
+                .Setup(p => p.Publish(It.IsAny<AuctionDeleted>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+
+            // Also cover generic overloads
+            _publishEndpoint
+                .Setup(p => p.Publish<AuctionCreated>(It.IsAny<AuctionCreated>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            _publishEndpoint
+                .Setup(p => p.Publish<AuctionUpdated>(It.IsAny<AuctionUpdated>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
+            _publishEndpoint
+                .Setup(p => p.Publish<AuctionDeleted>(It.IsAny<object>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
         }
 
     [Fact]
@@ -68,6 +87,197 @@ public class AuctionControllerTests
         // assert
         Assert.Equal(10, result.Value.Count);
         Assert.IsType<List<AuctionDto>>(result.Value);
+    }
+
+    [Fact]
+    public async Task CreateAuction_SaveFails_ReturnsBadRequest()
+    {
+        // arrange
+        var createDto = _fixture.Create<CreateAuctionDto>();
+        _auctionRepo.Setup(r => r.AddAuctionAsync(It.IsAny<Auction>()));
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(false);
+
+        // act
+        var result = await _controller.CreateAuction(createDto);
+
+        // assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+        _auctionRepo.Verify(r => r.AddAuctionAsync(It.IsAny<Auction>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task CreateAuction_NoIdentity_Throws()
+    {
+        // arrange
+        var createDto = _fixture.Create<CreateAuctionDto>();
+        _controller.ControllerContext.HttpContext.User = new ClaimsPrincipal();
+
+        // act/assert
+        var ex = await Assert.ThrowsAsync<Exception>(() => _controller.CreateAuction(createDto));
+        Assert.Equal("User identity not found", ex.Message);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_NotFound_ReturnsNotFound()
+    {
+        // arrange
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Auction)null);
+
+        // act
+        var result = await _controller.UpdateAuction(Guid.NewGuid(), new UpdateAuctionDto());
+
+        // assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_SellerMismatch_ReturnsForbid()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "someoneelse",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/1.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(It.IsAny<Guid>())).ReturnsAsync(auctionEntity);
+
+        // act
+        var result = await _controller.UpdateAuction(auctionEntity.Id, new UpdateAuctionDto { Make = "Honda" });
+
+        // assert
+        Assert.IsType<ForbidResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_SaveSucceeds_ReturnsOk_AndPublishes()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "testuser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/2.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);
+
+        // act
+        var result = await _controller.UpdateAuction(auctionEntity.Id, new UpdateAuctionDto { Make = "Honda" });
+
+        // assert
+        Assert.IsType<OkResult>(result.Result);
+        _publishEndpoint.Verify(p => p.Publish(It.IsAny<AuctionUpdated>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_SaveFails_ReturnsBadRequest()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "testuser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/3.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(false);
+
+        // act
+        var result = await _controller.UpdateAuction(auctionEntity.Id, new UpdateAuctionDto { Make = "Honda" });
+
+        // assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_NotFound_ReturnsNotFound()
+    {
+        // arrange
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Auction)null);
+
+        // act
+        var result = await _controller.DeleteAuction(Guid.NewGuid());
+
+        // assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_SellerMismatch_ReturnsForbid()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "someoneelse",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/4.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+
+        // act
+        var result = await _controller.DeleteAuction(auctionEntity.Id);
+
+        // assert
+        Assert.IsType<ForbidResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_SaveSucceeds_ReturnsOk_AndPublishes()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "testuser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/5.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);
+
+        // act
+        var result = await _controller.DeleteAuction(auctionEntity.Id);
+
+        // assert
+        Assert.IsType<OkResult>(result);
+        _publishEndpoint.Verify(p => p.Publish<AuctionDeleted>(It.IsAny<object>(), It.IsAny<CancellationToken>()), Times.Once);
+        _auctionRepo.Verify(r => r.RemoveAuction(auctionEntity), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_SaveFails_ReturnsBadRequest()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "testuser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/6.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(false);
+
+        // act
+        var result = await _controller.DeleteAuction(auctionEntity.Id);
+
+        // assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task GetAuctions_WithDateParam_PassesDateToRepo()
+    {
+        // arrange
+        var date = "2023-01-01";
+        var auctions = _fixture.CreateMany<AuctionDto>(5).ToList();
+        _auctionRepo.Setup(r => r.GetAuctionsAsync(date)).ReturnsAsync(auctions);
+
+        // act
+        var result = await _controller.GetAuctions(date);
+
+        // assert
+        Assert.Equal(5, result.Value.Count);
+        _auctionRepo.Verify(r => r.GetAuctionsAsync(It.Is<string>(d => d == date)), Times.Once);
     }
 
     [Fact]
@@ -115,6 +325,128 @@ public class AuctionControllerTests
         Assert.NotNull(createdResult);
         Assert.Equal("GetAuctionById", createdResult?.ActionName);
         Assert.IsType<AuctionDto>(createdResult?.Value);
+    }
+
+    [Fact]
+    public async Task CreateAuction_FailedSave_Returns400BadRequest()
+    {
+        // arrange
+        var createDto = _fixture.Create<CreateAuctionDto>();
+        _auctionRepo.Setup(r => r.AddAuctionAsync(It.IsAny<Auction>()));
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(false);
+
+        // act
+        var result = await _controller.CreateAuction(createDto);
+
+        // assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_WithUpdateAuctionDto_ReturnsOkResponse()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "testuser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/7.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);
+
+        var updateDto = new UpdateAuctionDto { Make = "Honda", Model = "Civic", Year = 2021, Color = "Red", Mileage = 2000 };
+
+        // act
+        var result = await _controller.UpdateAuction(auctionEntity.Id, updateDto);
+
+        // assert
+        Assert.IsType<OkResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_WithInvalidUser_Returns403Forbid()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "otheruser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/8.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(It.IsAny<Guid>())).ReturnsAsync(auctionEntity);
+
+        // act
+        var result = await _controller.UpdateAuction(auctionEntity.Id, new UpdateAuctionDto { Make = "Honda" });
+
+        // assert
+        Assert.IsType<ForbidResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_WithInvalidGuid_ReturnsNotFound()
+    {
+        // arrange
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Auction)null);
+
+        // act
+        var result = await _controller.UpdateAuction(Guid.NewGuid(), new UpdateAuctionDto());
+
+        // assert
+        Assert.IsType<NotFoundResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_WithValidUser_ReturnsOkResponse()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "testuser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/9.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+        _auctionRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(true);
+
+        // act
+        var result = await _controller.DeleteAuction(auctionEntity.Id);
+
+        // assert
+        Assert.IsType<OkResult>(result);
+        _auctionRepo.Verify(r => r.RemoveAuction(auctionEntity), Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_WithInvalidGuid_Returns404Response()
+    {
+        // arrange
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(It.IsAny<Guid>())).ReturnsAsync((Auction)null);
+
+        // act
+        var result = await _controller.DeleteAuction(Guid.NewGuid());
+
+        // assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_WithInvalidUser_Returns403Response()
+    {
+        // arrange
+        var auctionEntity = new Auction
+        {
+            Id = Guid.NewGuid(),
+            Seller = "otheruser",
+            Item = new Item { Make = "Toyota", Model = "Camry", Year = 2020, Color = "Blue", Mileage = 1000, ImageUrl = "http://img.example/10.jpg" }
+        };
+        _auctionRepo.Setup(r => r.GetAuctionEntityByIdAsync(auctionEntity.Id)).ReturnsAsync(auctionEntity);
+
+        // act
+        var result = await _controller.DeleteAuction(auctionEntity.Id);
+
+        // assert
+        Assert.IsType<ForbidResult>(result);
     }
 
 }
