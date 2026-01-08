@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AuctionDbContext>(options => 
 {
@@ -67,3 +68,5 @@ catch (Exception ex)
 }
 
 app.Run();
+
+public partial class Program { }
