@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<T>();
                 
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
                 if (db is AuctionDbContext auctionDb)
                 {
                     DBHelper.InitiDbForTests(auctionDb);
@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
                 var scopedServices = scope.ServiceProvider;
                 var db = scopedServices.GetRequiredService<T>();
                 
-                db.Database.Migrate();
+                db.Database.EnsureCreated();
                 if (db is AuctionDbContext auctionDb)
                 {
                     DBHelper.InitiDbForTests(auctionDb);

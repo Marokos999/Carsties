@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication;
 using Testcontainers.PostgreSql;
 
 namespace AuctionService.IntegrationTests.Fixtures;
@@ -33,6 +34,10 @@ public class CustomWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetim
 
             services.AddMassTransitTestHarness();
             services.EnsureCreated<AuctionDbContext>();
+
+            // Override authentication to use a simple test scheme
+            services.AddAuthentication("Test")
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
         });
     }
 
