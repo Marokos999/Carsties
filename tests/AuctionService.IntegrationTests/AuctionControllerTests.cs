@@ -2,6 +2,8 @@ using System;
 using System.Net;
 using System.Net.Http.Json;
 using AuctionService.Data;
+using Contracts;
+using MassTransit.Testing;
 using AuctionService.DTOs;
 using AuctionService.IntegrationTests.Fixtures;
 using AuctionService.IntegrationTests.Util;
@@ -129,6 +131,23 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
     }
 
     [Fact]
+    public async Task CreateAuction_ShouldPublish_AuctionCreated_Message()
+    {
+        using var scope = _factory.Services.CreateScope();
+        var harness = scope.ServiceProvider.GetRequiredService<ITestHarness>();
+
+        var user = $"user-{Guid.NewGuid():N}";
+        SetUser(user);
+        var dto = BuildCreateDto();
+
+        var response = await _client.PostAsJsonAsync(BaseUrl, dto);
+        response.EnsureSuccessStatusCode();
+
+        var published = await harness.Published.Any<AuctionCreated>();
+        Assert.True(published);
+    }
+
+    [Fact]
     public async Task UpdateAuction_NotFound_ShouldReturn404()
     {
         var user = $"user-{Guid.NewGuid():N}";
@@ -148,6 +167,24 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
         var update = BuildUpdateDto();
         var response = await _client.PutAsJsonAsync($"{BaseUrl}/{created!.Id}", update);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateAuction_AsSeller_ShouldPublish_AuctionUpdated_Message()
+    {
+        using var scope = _factory.Services.CreateScope();
+        var harness = scope.ServiceProvider.GetRequiredService<ITestHarness>();
+
+        var seller = $"user-{Guid.NewGuid():N}";
+        var created = await CreateAuctionAsUserAsync(seller);
+
+        SetUser(seller);
+        var update = BuildUpdateDto();
+        var response = await _client.PutAsJsonAsync($"{BaseUrl}/{created!.Id}", update);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var published = await harness.Published.Any<AuctionUpdated>();
+        Assert.True(published);
     }
 
     [Fact]
@@ -171,6 +208,23 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
         SetUser(seller);
         var response = await _client.DeleteAsync($"{BaseUrl}/{created!.Id}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeleteAuction_AsSeller_ShouldPublish_AuctionDeleted_Message()
+    {
+        using var scope = _factory.Services.CreateScope();
+        var harness = scope.ServiceProvider.GetRequiredService<ITestHarness>();
+
+        var seller = $"user-{Guid.NewGuid():N}";
+        var created = await CreateAuctionAsUserAsync(seller);
+
+        SetUser(seller);
+        var response = await _client.DeleteAsync($"{BaseUrl}/{created!.Id}");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var published = await harness.Published.Any<AuctionDeleted>();
+        Assert.True(published);
     }
 
     [Fact]
