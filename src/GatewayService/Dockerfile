@@ -5,6 +5,8 @@ EXPOSE 80
 # Copy csproj and restore as distinct layers
 COPY Carsties.sln Carsties.sln
 COPY src/GatewayService/GatewayService.csproj src/GatewayService/GatewayService.csproj
+COPY tests/AuctionService.UnitTests/AuctionService.UnitTests.csproj tests/AuctionService.UnitTests/AuctionService.UnitTests.csproj
+COPY tests/AuctionService.IntegrationTests/AuctionService.IntegrationTests.csproj tests/AuctionService.IntegrationTests/AuctionService.IntegrationTests.csproj
 
 # Restore package deps
 RUN dotnet restore src/GatewayService/GatewayService.csproj
