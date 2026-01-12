@@ -136,7 +136,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -590,7 +590,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"{{$randomColor}}\",\n  \"year\": \"2020\",\n  \"mileage\": \"{{$randomInt}}\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": {{$randomInt}},\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+									"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"{{$randomColor}}\",\n  \"year\": \"2020\",\n  \"mileage\": \"{{$randomInt}}\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": {{$randomInt}},\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -890,7 +890,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$guid}}\",\n  \"color\": \"{{$randomColor}}\",\n  \"year\": \"2020\",\n  \"mileage\": \"{{$randomInt}}\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": {{$randomInt}},\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$guid}}\",\n  \"color\": \"{{$randomColor}}\",\n  \"year\": \"2020\",\n  \"mileage\": \"{{$randomInt}}\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": {{$randomInt}},\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1224,7 +1224,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1295,7 +1295,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1733,7 +1733,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 100,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2164,7 +2164,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"{{$randomColor}}\",\n  \"year\": \"2020\",\n  \"mileage\": \"{{$randomInt}}\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": {{$randomInt}},\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+									"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"{{$randomColor}}\",\n  \"year\": \"2020\",\n  \"mileage\": \"{{$randomInt}}\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": {{$randomInt}},\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2555,7 +2555,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 1111,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+									"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"Escort\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 1111,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2853,7 +2853,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 1111,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 1111,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3199,7 +3199,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"https://cdn.pixabay.com/photo/2018/02/04/15/45/car-3130111_960_720.jpg\",\n  \"reservePrice\": 10,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
+							"raw": "{\n  \"make\": \"Ford\",\n  \"model\": \"{{$randomFirstName}}\",\n  \"color\": \"White\",\n  \"year\": \"2021\",\n  \"mileage\": \"10000\",\n  \"imageUrl\": \"{{imageUrlFord}}\",\n  \"reservePrice\": 10,\n  \"auctionEnd\": \"{{dateString}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3363,6 +3363,46 @@
 		{
 			"key": "createdItemMileage",
 			"value": ""
+		},
+		{
+			"key": "imageUrl",
+			"value": "https://cdn.pixabay.com/photo/2019/12/26/20/50/audi-r8-4721217_960_720.jpg",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlFord",
+			"value": "https://cdn.pixabay.com/photo/2016/05/06/16/32/car-1376190_960_720.jpg",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlAudi",
+			"value": "https://cdn.pixabay.com/photo/2019/12/26/20/50/audi-r8-4721217_960_720.jpg",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlFerrari",
+			"value": "https://cdn.pixabay.com/photo/2017/11/09/01/49/ferrari-458-spider-2932191_960_720.jpg",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlMercedes",
+			"value": "https://cdn.pixabay.com/photo/2016/04/17/22/10/mercedes-benz-1335674_960_720.png",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlBMW",
+			"value": "https://cdn.pixabay.com/photo/2017/08/31/05/47/bmw-2699538_960_720.jpg",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlBugatti",
+			"value": "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_960_720.jpg",
+			"type": "string"
+		},
+		{
+			"key": "imageUrlModelT",
+			"value": "https://cdn.pixabay.com/photo/2017/08/02/19/47/vintage-2573090_960_720.jpg",
+			"type": "string"
 		}
 	]
 }
