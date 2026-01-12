@@ -11,11 +11,15 @@ public class AuctionSvcHttpClient(HttpClient httpClient, IConfiguration config)
 
         var lastUpdated = await db.Find<Item, string>()
             .Sort(x => x.Descending(x => x.UpdatedAt))
-            .Project(x => x.UpdatedAt.ToString())
+            .Project(x => x.UpdatedAt.ToString("O"))
             .ExecuteFirstAsync();
 
-        var items = await httpClient.GetFromJsonAsync<List<Item>>(config["AuctionServiceUrl"] 
-            + "/api/auctions?date=" + lastUpdated);
+        var baseUrl = config["AuctionServiceUrl"] + "/api/auctions";
+        var url = string.IsNullOrEmpty(lastUpdated) 
+            ? baseUrl 
+            : baseUrl + "?date=" + Uri.EscapeDataString(lastUpdated);
+
+        var items = await httpClient.GetFromJsonAsync<List<Item>>(url);
 
         return items ?? [];
     }

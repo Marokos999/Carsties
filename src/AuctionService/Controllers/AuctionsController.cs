@@ -16,7 +16,7 @@ namespace AuctionService.Controllers;
 public class AuctionsController(IAuctionRepository auctionRepository, IMapper mapper, IPublishEndpoint publishEndpoint) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<AuctionDto>>> GetAuctions(string date)
+    public async Task<ActionResult<List<AuctionDto>>> GetAuctions([FromQuery] string? date)
     {
         return await auctionRepository.GetAuctionsAsync(date);
     }
