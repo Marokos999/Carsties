@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { hostname } from "os";
 
 const nextConfig: NextConfig = {
   logging:{
@@ -12,10 +11,6 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "cdn.pixabay.com",
-      },
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
       },
     ],
   },

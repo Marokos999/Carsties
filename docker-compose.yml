@@ -6,7 +6,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - /var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -22,7 +22,7 @@ services:
      ports:
        - "27017:27017"
      volumes:
-       - /data/db
+       - mongodata:/data/db
      healthcheck:
       test:
         [
