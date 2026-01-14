@@ -3,6 +3,20 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS: allow specific frontend origins
+var corsPolicy = "AllowWebApp";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicy, policy =>
+        policy
+            .WithOrigins(
+                "http://localhost:3000",
+                "http://localhost:3001"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+    );
+});
 
 builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
@@ -20,7 +34,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-app.UseCors("AllowWebApp");
+// Apply CORS before proxying
+app.UseCors(corsPolicy);
 
 app.MapReverseProxy();
 
