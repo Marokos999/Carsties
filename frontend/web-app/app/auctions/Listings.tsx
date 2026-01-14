@@ -17,6 +17,7 @@ export default function Listings() {
             pageNumber: state.pageNumber,
             pageSize: state.pageSize,
             searchTerm: state.searchTerm,
+            orderBy: state.orderBy,
         }))
     );
 
@@ -27,6 +28,7 @@ export default function Listings() {
             pageNumber: params.pageNumber,
             pageSize: params.pageSize,
             searchTerm: params.searchTerm,
+            orderBy: params.orderBy,
         },
         { skipEmptyString: true, skipNull: true }
     );
