@@ -9,6 +9,7 @@ import Filters from './Filters';
 import { useShallow } from 'zustand/shallow';
 import { useParamsStore } from '@/hooks/useParamsStore';
 import qs from 'query-string';
+import EmptyFilter from '../components/EmptyFilter';
 
 export default function Listings() {
     const [data, setData] = useState<PagedResult<Auction>>();
@@ -18,6 +19,7 @@ export default function Listings() {
             pageSize: state.pageSize,
             searchTerm: state.searchTerm,
             orderBy: state.orderBy,
+            filterBy: state.filterBy,
         }))
     );
 
@@ -29,6 +31,7 @@ export default function Listings() {
             pageSize: params.pageSize,
             searchTerm: params.searchTerm,
             orderBy: params.orderBy,
+            filterBy: params.filterBy
         },
         { skipEmptyString: true, skipNull: true }
     );
@@ -46,7 +49,11 @@ export default function Listings() {
     return (
         <>
             <Filters />
-            <div className="grid grid-cols-4 gap-6">
+            {data.totalCount === 0 ? (
+             <EmptyFilter  showReset={true} />
+            ) : (
+                <>
+                 <div className="grid grid-cols-4 gap-6">
                 {data.results.map((auction) => (
                     <AuctionCard key={auction.id} auction={auction} />
                 ))}
@@ -58,6 +65,9 @@ export default function Listings() {
                     pageChanged={setPageNumber}
                 />
             </div>
+                </>
+            )}
+           
         </>
     );
 }
