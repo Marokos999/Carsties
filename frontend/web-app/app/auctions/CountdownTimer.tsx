@@ -12,9 +12,7 @@ const renderer = (props: any) => {
     : "bg-green-600";
 
   return (
-    <div
-      className={`border-2 border-white text-white py-2 px-2 rounded-lg flex justify-center ${statusClass}`}
-    >
+    <div className={`border-2 border-white text-white py-2 px-2 rounded-lg flex justify-center ${statusClass}`}>
       {completed ? "Finished" : `${days}d ${zeroPad(hours)}h ${zeroPad(minutes)}m ${zeroPad(seconds)}s`}
     </div>
   );
