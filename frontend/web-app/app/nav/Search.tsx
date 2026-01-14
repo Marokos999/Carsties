@@ -1,14 +1,36 @@
+'use client';
+
+import { useParamsStore } from "@/hooks/useParamsStore";
+import { ChangeEvent, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 
 export default function Search() {
+  const setParams = useParamsStore((state) => state.setParams);
+  const [value, setValue] = useState('');
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    setValue(e.target.value);
+  }
+
+  function handleSearch() {
+    setParams({ searchTerm: value});
+  }
+
   return (
-    <div className="flex w-[150%] items-center border-2 border-gray-300 rounded-full py-2 shadow-sm">
+    <div className="flex w-[50%] items-center border-2 border-gray-300 rounded-full py-2 shadow-sm">
         <input 
+            onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                    handleSearch();
+                }
+            }}
+            onChange={handleChange}
+            value={value}
             type="text" 
             placeholder="Search for cars by make, model or color"
             className="
-            flex-grow 
+            grow 
             pl-5 
             bg-transparent
             focus:outline-none
@@ -19,7 +41,7 @@ export default function Search() {
             text-gray-600
             "
         />
-        <button>
+        <button onClick={handleSearch}>
             <FaSearch size={30} className="bg-red-400 text-white rounded-full p-2 cursor-pointer mx-2" />
         </button>
     </div>
