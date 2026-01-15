@@ -14,6 +14,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     } as OIDCConfig<Omit<Profile, "username">>),
   ],
   callbacks:{
+    async authorized({auth}){
+      return !!auth
+    },
     async jwt({ token, profile }) {
       if(profile){
         token.username = profile.username;
@@ -26,5 +29,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.username = token.username as string;
     }
     return session;
-  },
+  }
 })
