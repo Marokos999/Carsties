@@ -87,7 +87,8 @@ export default function AuctionForm({ auction }: Props) {
                         rules={{ required: 'Auction end date is required' }}
                     />
                 </div>
-            </>}
+            </>
+            }
 
 
             <div className="flex justify-between">
