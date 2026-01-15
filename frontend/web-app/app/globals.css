@@ -1,8 +1,41 @@
 @import "tailwindcss";
 @import "flowbite-react/plugin/tailwindcss";
+@import "react-datepicker/dist/react-datepicker.css";
 @source "../.flowbite-react/class-list.json";
 
 
 [role=button], button {
     cursor: pointer;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+}
+
+.react-datepicker {
+    font-family: inherit;
+}
+
+.react-datepicker__header {
+    background-color: rgb(59 130 246);
+    border-bottom: 1px solid rgb(59 130 246);
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+    color: white;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    background-color: rgb(59 130 246);
+}
+
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--keyboard-selected:hover {
+    background-color: rgb(37 99 235);
 }
