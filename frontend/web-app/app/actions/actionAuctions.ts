@@ -1,4 +1,4 @@
-// Client-friendly fetch helper (no server actions)
+'use server'
 
 import { auth } from "@/auth";
 import { PagedResult, Auction } from "@/types";
@@ -20,16 +20,27 @@ export async function updateAuctionTest(): Promise<{status: number, message: str
 
     const session = await auth();
 
-    const res = await fetch(`http://localhost:6001/auctions/afbee524-5972-4075-8800-7d1f9d7b0a0c`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${session?.accessToken}`
-        },
-        body: JSON.stringify(data)
-    });
+    if (!session?.accessToken) {
+        return {status: 401, message: 'No access token found'};
+    }
 
-    if (!res.ok) return {status: res.status, message: res.statusText};
+    try {
+        const res = await fetch(`http://localhost:6001/auctions/afbee524-5972-4075-8800-7d1f9d7b0a0c`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.accessToken}`
+            },
+            body: JSON.stringify(data)
+        });
 
-    return {status: res.status, message: res.statusText};
+        const responseText = await res.text();
+        
+        return {
+            status: res.status, 
+            message: res.ok ? 'Success' : `${res.statusText} - ${responseText}`
+        };
+    } catch (error: any) {
+        return {status: 500, message: error.message || 'Request failed'};
+    }
 }

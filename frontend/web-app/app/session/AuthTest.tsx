@@ -11,8 +11,15 @@ export default function AuthTest() {
     function handleUpdate() {
         setResult(null);
         setLoading(true);
-        updateAuctionTest().then(res => setResult(res))
-            .catch(err => setResult(err))
+        updateAuctionTest()
+            .then(res => {
+                console.log('Result:', res);
+                setResult(res);
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                setResult({status: 500, message: err.message || 'Unknown error'});
+            })
             .finally(() => setLoading(false))
     }
 
