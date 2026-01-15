@@ -20,6 +20,8 @@ export default function Listings() {
             searchTerm: state.searchTerm,
             orderBy: state.orderBy,
             filterBy: state.filterBy,
+            seller: state.seller,
+            winner: state.winner
         }))
     );
 
@@ -31,7 +33,9 @@ export default function Listings() {
             pageSize: params.pageSize,
             searchTerm: params.searchTerm,
             orderBy: params.orderBy,
-            filterBy: params.filterBy
+            filterBy: params.filterBy,
+            seller: params.seller,
+            winner: params.winner
         },
         { skipEmptyString: true, skipNull: true }
     );
