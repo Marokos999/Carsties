@@ -1,11 +1,41 @@
-import { Button } from "flowbite-react";
+'use client';
+
+import { Dropdown, DropdownDivider, DropdownItem } from "flowbite-react";
+import { User } from "next-auth";
+import { signOut } from "next-auth/react";
 import Link from "next/dist/client/link";
+import { AiFillCar, AiFillTrophy, AiOutlineLogout } from "react-icons/ai";
+import { HiCog, HiUser } from "react-icons/hi";
 
 
-export default function UserActions() {
+type Props = {
+  user: User;
+}
+
+
+export default function UserActions({ user }: Props) {
+  const displayName = Array.isArray(user.name) ? user.name[1] : user.name;
+  
   return (
-    <Button>
-        <Link href="/session">Sesion</Link>
-    </Button>
+    <Dropdown inline label={`Welcome ${displayName}`} className="cursor-pointer">
+      <DropdownItem icon={HiUser}>
+          My Auctions
+      </DropdownItem>
+      <DropdownItem icon={AiFillTrophy}>
+          Auctions won
+      </DropdownItem>
+      <DropdownItem icon={AiFillCar}>
+          Sell my car
+      </DropdownItem>
+      <DropdownItem icon={HiCog}>
+          <Link href="/session">
+            Session (dev only!)
+          </Link>
+      </DropdownItem>
+      <DropdownDivider />
+      <DropdownItem icon={AiOutlineLogout} onClick={() => signOut({redirectTo: '/'})}>
+          Sign out
+      </DropdownItem>
+    </Dropdown>
   )
 }
