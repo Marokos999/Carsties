@@ -6,7 +6,7 @@ import { PagedResult, Auction } from "@/types";
 import { FieldValues } from "react-hook-form";
 
 export async function getData(query: string): Promise<PagedResult<Auction>> {
-    return fetchWrapper.get(`search${query}`);
+    return fetchWrapper.get(`search?${query}`)
 }
 
 

@@ -45,7 +45,9 @@ export default function Listings() {
     }
 
     useEffect(() => {
-        getData(query).then((res) => setData(res));
+        getData(query).then((res) => {
+            setData(res);
+        });
     }, [query]);
 
     if (!data) return <h3>Loading...</h3>;
@@ -53,7 +55,7 @@ export default function Listings() {
     return (
         <>
             <Filters />
-            {data.totalCount === 0 ? (
+            {!data.results || data.totalCount === 0 ? (
              <EmptyFilter  showReset={true} />
             ) : (
                 <>
