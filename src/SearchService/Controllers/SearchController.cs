@@ -63,4 +63,15 @@ public class SearchController : ControllerBase
             totalCount = result.TotalCount,
         });       
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Item>> GetItemById(string id)
+    {
+        var db = await DB.InitAsync("SearchDb");
+        var item = await db.Find<Item>().OneAsync(id);
+
+        if (item == null) return NotFound();
+
+        return Ok(item);
+    }
 }
