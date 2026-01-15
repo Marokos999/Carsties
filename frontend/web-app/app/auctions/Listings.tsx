@@ -20,6 +20,8 @@ export default function Listings() {
             searchTerm: state.searchTerm,
             orderBy: state.orderBy,
             filterBy: state.filterBy,
+            seller: state.seller,
+            winner: state.winner
         }))
     );
 
@@ -31,7 +33,9 @@ export default function Listings() {
             pageSize: params.pageSize,
             searchTerm: params.searchTerm,
             orderBy: params.orderBy,
-            filterBy: params.filterBy
+            filterBy: params.filterBy,
+            seller: params.seller,
+            winner: params.winner
         },
         { skipEmptyString: true, skipNull: true }
     );
@@ -41,7 +45,9 @@ export default function Listings() {
     }
 
     useEffect(() => {
-        getData(query).then((res) => setData(res));
+        getData(query).then((res) => {
+            setData(res);
+        });
     }, [query]);
 
     if (!data) return <h3>Loading...</h3>;
@@ -49,7 +55,7 @@ export default function Listings() {
     return (
         <>
             <Filters />
-            {data.totalCount === 0 ? (
+            {!data.results || data.totalCount === 0 ? (
              <EmptyFilter  showReset={true} />
             ) : (
                 <>

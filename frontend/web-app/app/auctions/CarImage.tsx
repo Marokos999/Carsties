@@ -9,8 +9,16 @@ type Props = {
 
 export default function CarImage({ imageUrl }: Props) {
     const [loading, setLoading] = useState(true);
-  return (
-            <Image
+    
+    // Provera da li je validan URL
+    const isValidUrl = imageUrl && (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('/'));
+    
+    if (!isValidUrl) {
+        return <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500">No image</div>;
+    }
+    
+    return (
+        <Image
             src={imageUrl}
             alt='Image of car'
             fill
@@ -23,6 +31,7 @@ export default function CarImage({ imageUrl }: Props) {
             priority
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             onLoad={() => setLoading(false)}
+            unoptimized
         />
-  )
+    )
 }

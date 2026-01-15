@@ -13,7 +13,6 @@ export default function AuthTest() {
         setLoading(true);
         updateAuctionTest()
             .then(res => {
-                console.log('Result:', res);
                 setResult(res);
             })
             .catch(err => {
