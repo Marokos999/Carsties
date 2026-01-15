@@ -18,7 +18,7 @@ export default function CarImage({ imageUrl }: Props) {
     }
     
     return (
-            <Image
+        <Image
             src={imageUrl}
             alt='Image of car'
             fill
@@ -31,6 +31,7 @@ export default function CarImage({ imageUrl }: Props) {
             priority
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             onLoad={() => setLoading(false)}
+            unoptimized
         />
-  )
+    )
 }

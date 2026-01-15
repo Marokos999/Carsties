@@ -47,6 +47,7 @@ export default function AuctionForm({ auction }: Props) {
                 throw res.error;
             }
             router.push(`/auctions/details/${id}`)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error.status + ' ' + error.message)
         }
