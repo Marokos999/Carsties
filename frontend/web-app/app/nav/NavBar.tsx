@@ -1,5 +1,6 @@
 import Search from './Search'
 import Logo from './Logo'
+import LoginButton from './LoginButton'
 
 export default function NavBar() {
   return (
@@ -7,7 +8,7 @@ export default function NavBar() {
             bg-white p-5 items-center text-gray-800 shadow-md">
               <Logo />
               <Search />
-            <div>Login</div>
+              <LoginButton />
         </header>
   )
 }

@@ -68,7 +68,7 @@ internal static class HostingExtensions
 
                 if (builder.Environment.IsEnvironment("Docker"))
                 {
-                    options.IssuerUri = "http://identity-svc";
+                    options.IssuerUri = "http://localhost:5000";
                 }
 
                 // Use a large chunk size for diagnostic data in development where it will be redirected to a local file.

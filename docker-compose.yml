@@ -91,6 +91,8 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=identity
     ports:
       - "5000:80"
+    volumes:
+      - identitydata:/root/.aspnet/DataProtection-Keys
     depends_on:
        postgres:
         condition: service_healthy
@@ -108,3 +110,4 @@ services:
 volumes:
   pgdata:
   mongodata:
+  identitydata:
