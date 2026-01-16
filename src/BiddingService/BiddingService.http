@@ -1,6 +1,15 @@
-@BiddingService_HostAddress = http://localhost:5146
+@BiddingService_HostAddress = http://localhost:7003
+@token = your-token-here
 
-GET {{BiddingService_HostAddress}}/weatherforecast/
+# Get bids for auction
+GET {{BiddingService_HostAddress}}/api/bids/afbee524-5972-4075-8800-7d1f9d7b0a0c
+Accept: application/json
+
+###
+
+# Place a bid (requires authentication)
+POST {{BiddingService_HostAddress}}/api/bids?auctionId=afbee524-5972-4075-8800-7d1f9d7b0a0c&amount=5000
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###

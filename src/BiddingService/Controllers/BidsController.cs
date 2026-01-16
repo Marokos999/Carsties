@@ -1,4 +1,6 @@
 using System;
+using AutoMapper;
+using BiddingService.DTOs;
 using BiddingService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +10,11 @@ namespace BiddingService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BidsController : ControllerBase
+public class BidsController(IMapper mapper) : ControllerBase
 {
     [Authorize]
     [HttpPost]
-    public async Task<ActionResult<Bid>> PlaceBid(string auctionId, int amount)
+    public async Task<ActionResult<BidDto>> PlaceBid( string auctionId, int amount)
     {
         var db = await DB.InitAsync("BidDb");
         var auction = await db.Find<Auction>().OneAsync(auctionId);
@@ -46,24 +48,24 @@ public class BidsController : ControllerBase
                     .ExecuteFirstAsync();
 
             if (highBid is not null && amount > highBid.Amount || highBid is null)
-                {
-                    bid.BidStatus = amount > auction.ReservePrice
-                        ? BidStatus.Accepted
-                        : BidStatus.AcceptedBelowReserve;
-                }
+            {
+                bid.BidStatus = amount > auction.ReservePrice
+                    ? BidStatus.Accepted
+                    : BidStatus.AcceptedBelowReserve;
+            }
 
-                if (highBid is not null && bid.Amount <= highBid.Amount)
-                {
-                    bid.BidStatus = BidStatus.TooLow;
-                }
+            if (highBid is not null && bid.Amount <= highBid.Amount)
+            {
+                bid.BidStatus = BidStatus.TooLow;
+            }
         }
         await db.SaveAsync(bid);
 
-        return Ok(bid);
+        return Ok(mapper.Map<BidDto>(bid));
     }        
 
     [HttpGet("{auctionId}")]
-    public async Task<ActionResult<List<Bid>>> GetBidsForAuction(string auctionId)
+    public async Task<ActionResult<List<BidDto>>> GetBidsForAuction(string auctionId)
     {
         var db = await DB.InitAsync("BidDb");
         var bids = await db.Find<Bid>()
@@ -71,6 +73,6 @@ public class BidsController : ControllerBase
             .Sort(b => b.Descending(a => a.BidTime))
             .ExecuteAsync();
 
-        return bids;
+        return bids.Select(mapper.Map<BidDto>).ToList();
     }
 }

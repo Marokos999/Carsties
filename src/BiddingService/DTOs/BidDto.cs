@@ -2,7 +2,7 @@ using System;
 
 namespace BiddingService.DTOs;
 
-public class BitDto
+public class BidDto
 {
     public required string Id { get; set; }
     public required string AuctionId { get; set; }
