@@ -8,7 +8,7 @@ namespace BiddingService.Consumers;
 
 public class AuctionCreatedConsumer : IConsumer<AuctionCreated>
 {
-public async Task Consume(ConsumeContext<AuctionCreated> context)
+    public async Task Consume(ConsumeContext<AuctionCreated> context)
     {
         var db = await DB.InitAsync("BidDb");
         var auction = new Auction

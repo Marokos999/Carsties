@@ -10,13 +10,11 @@ namespace BiddingService.Controllers;
 [Route("api/[controller]")]
 public class BidsController : ControllerBase
 {
-
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<Bid>> PlaceBid(string auctionId, int amount)
     {
-        var db = await DB.InitAsync("BidDB");
-
+        var db = await DB.InitAsync("BidDb");
         var auction = await db.Find<Auction>().OneAsync(auctionId);
         if(auction is null)
         {
@@ -64,11 +62,10 @@ public class BidsController : ControllerBase
         return Ok(bid);
     }        
 
-        [HttpGet("{auctionId}")]
+    [HttpGet("{auctionId}")]
     public async Task<ActionResult<List<Bid>>> GetBidsForAuction(string auctionId)
     {
-        var db = await DB.InitAsync("BidDB");
-        
+        var db = await DB.InitAsync("BidDb");
         var bids = await db.Find<Bid>()
             .Match(a => a.AuctionId == auctionId)
             .Sort(b => b.Descending(a => a.BidTime))
