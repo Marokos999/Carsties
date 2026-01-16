@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using AuctionService;
 using BiddingService.DTOs;
 using BiddingService.Models;
 using Contracts;
@@ -7,12 +8,13 @@ using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Entities;
+using static AuctionService.GrpcAuction;
 
 namespace BiddingService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BidsController(IMapper mapper, IPublishEndpoint publishEndpoint) : ControllerBase
+public class BidsController(IMapper mapper, IPublishEndpoint publishEndpoint, GrpcAuctionClient grpcClient) : ControllerBase
 {
     [Authorize]
     [HttpPost]
@@ -20,9 +22,23 @@ public class BidsController(IMapper mapper, IPublishEndpoint publishEndpoint) : 
     {
         var db = await DB.InitAsync("BidDb");
         var auction = await db.Find<Auction>().OneAsync(auctionId);
-        if(auction is null)
+        
+        if (auction is null)
         {
-            return NotFound("Auction not found");
+            var grpcAuction = await grpcClient.GetAuctionAsync(new GetAuctionRequest { Id = auctionId });
+
+            if (grpcAuction?.Auction is null)
+            {
+                return BadRequest("Cannot accept bids for this auction");
+            }
+
+            auction = new Auction
+            {
+                ID = grpcAuction.Auction.Id,
+                Seller = grpcAuction.Auction.Seller,
+                ReservePrice = grpcAuction.Auction.ReservePrice,
+                AuctionEnd = DateTime.Parse(grpcAuction.Auction.AuctionEnd)
+            };
         }
 
         if(auction.Seller == User.Identity?.Name)

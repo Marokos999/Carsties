@@ -1,3 +1,4 @@
+using AuctionService;
 using BiddingService.Consumers;
 using BiddingService.Services;
 using MassTransit;
@@ -41,6 +42,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHostedService<CheckAuctionFinished>();
+
+builder.Services.AddGrpcClient<GrpcAuction.GrpcAuctionClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcAuction"] ?? "http://localhost:7001");
+});
 
 
 var app = builder.Build();
