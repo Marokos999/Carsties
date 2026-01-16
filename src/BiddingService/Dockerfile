@@ -1,0 +1,28 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+EXPOSE 80
+EXPOSE 7777
+
+
+# Copy csproj and restore as distinct layers
+COPY Carsties.sln Carsties.sln
+COPY src/BiddingService/BiddingService.csproj src/BiddingService/BiddingService.csproj
+COPY src/AuctionService/AuctionService.csproj src/AuctionService/AuctionService.csproj
+COPY src/Contracts/Contracts.csproj src/Contracts/Contracts.csproj
+
+# Copy proto files for gRPC
+COPY src/AuctionService/protos/ src/AuctionService/protos/
+
+# Restore package deps
+RUN dotnet restore src/BiddingService/BiddingService.csproj
+
+# Copy everything else and build
+COPY . .
+WORKDIR /src/src/BiddingService
+RUN dotnet publish -c Release -o /app/publish
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "BiddingService.dll"]

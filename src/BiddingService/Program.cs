@@ -38,6 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.RequireHttpsMetadata = false;
         options.TokenValidationParameters.ValidateAudience = false;
         options.TokenValidationParameters.NameClaimType = "name";
+        options.TokenValidationParameters.ValidIssuers = new[] { "http://identity-svc", "http://localhost:5000" };
     });    
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
