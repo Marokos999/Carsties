@@ -12,7 +12,7 @@ export default function Search() {
 
 
   useEffect(() => {
-     if(searchTerm === '') setValue('');
+     if(searchTerm === '')  setValue('');
   }, [searchTerm]);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -35,17 +35,7 @@ export default function Search() {
             value={value}
             type="text" 
             placeholder="Search for cars by make, model or color"
-            className="
-            grow 
-            pl-5 
-            bg-transparent
-            focus:outline-none
-            border-transparent
-            focus:border-transparent
-            focus:ring-0
-            text-sm
-            text-gray-600
-            "
+            className=" input-custom"
         />
         <button onClick={handleSearch}>
             <FaSearch size={30} className="bg-red-400 text-white rounded-full p-2 cursor-pointer mx-2" />
