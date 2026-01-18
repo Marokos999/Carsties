@@ -1,7 +1,7 @@
 
 import Heading from "@/app/components/Heading";
 import AuctionForm from "../../AuctionForm";
-import { getDetailedViewData } from "@/app/actions/actionAuctions";
+import { getDetailedViewData } from "@/app/actions/auctionActions";
 
 export default async function Update({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

@@ -2,7 +2,7 @@
 
 import AuctionCard from './AuctionCard';
 import AppPagination from '../components/AppPagination';
-import { getData } from '../actions/actionAuctions';
+import { getData } from '../actions/auctionActions';
 import { useEffect, useState } from 'react';
 import Filters from './Filters';
 import { useShallow } from 'zustand/shallow';
