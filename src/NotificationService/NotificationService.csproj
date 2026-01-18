@@ -8,6 +8,10 @@
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Hubs\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
