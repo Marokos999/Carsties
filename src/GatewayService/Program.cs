@@ -15,6 +15,8 @@ builder.Services.AddCors(options =>
             )
             .AllowAnyMethod()
             .AllowAnyHeader()
+            .AllowCredentials()
+            .WithOrigins(builder.Configuration["ClientApp"]!)
     );
 });
 
