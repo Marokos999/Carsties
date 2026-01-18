@@ -47,7 +47,7 @@ export default function BidList({ user, auction }: Props) {
             </div>
         </div>      
         
-        <div className="overflow-auto h-[350px] flex flex-col-reverse px-2">
+        <div className="overflow-auto h-87.5 flex flex-col-reverse px-2">
            {bids.length === 0 ? (
              <EmptyFilter 
                 title="No bids for this item."
