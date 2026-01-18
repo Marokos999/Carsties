@@ -39,3 +39,9 @@
 .react-datepicker__day--keyboard-selected:hover {
     background-color: rgb(37 99 235);
 }
+
+@layer components {
+    .input-custom {
+        @apply grow pl-5 bg-transparent focus:outline-none border-transparent focus:border-transparent focus:ring-0
+    }
+}
