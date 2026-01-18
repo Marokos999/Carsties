@@ -9,12 +9,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(corsPolicy, policy =>
         policy
-            .WithOrigins(
-                "http://localhost:3000",
-                "http://localhost:3001"
-            )
+            .WithOrigins(builder.Configuration["ClientApp"] ?? "http://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
+            .AllowCredentials()
     );
 });
 
