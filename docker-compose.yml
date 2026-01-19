@@ -95,6 +95,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
       - IssuerUri=http://localhost:5000
+      - ClientApp=http://localhost:3000
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=identity
     ports:
       - "5000:80"
