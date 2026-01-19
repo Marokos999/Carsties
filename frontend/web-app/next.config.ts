@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
   },
-  
+  output: 'standalone',
 };
 
 export default withFlowbiteReact(nextConfig);

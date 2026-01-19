@@ -146,6 +146,21 @@ services:
       depends_on:
        rabbitmq:
          condition: service_started
+  web-app:
+    image: marokos/web-app:latest
+    build: 
+      context: .
+      dockerfile: frontend/web-app/Dockerfile
+    volumes:
+      - /var/lib/web/data
+    ports:
+      - "3000:3000"
+    environment:
+     - AUTH_SECRET="8oyGHVIKEZncQqBFj92Y3xiRZVW11sV5weBT3GlFJA0=" 
+     - API_URL=http://gateway-svc/ 
+     - ID_URL=http://identity-svc/
+     - AUTH_URL=http://localhost:3000
+     - AUTH_URL_INTERNAL=http://web-app:3000
 volumes:
   pgdata:
   mongodata:
