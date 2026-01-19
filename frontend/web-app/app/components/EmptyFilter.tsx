@@ -15,10 +15,6 @@ type Props = {
 export default function EmptyFilter({ title, subtitle, showReset, showLogin, callbackUrl }: Props) {
     title = title || "No results found";
     subtitle = subtitle || "Try adjusting your filter or search criteria to find what you're looking for.";
-    showReset,
-    showLogin,
-    callbackUrl
-
 
     const reset = useParamsStore(state => state.reset);
 

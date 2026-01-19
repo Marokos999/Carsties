@@ -22,13 +22,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.accessToken = account.access_token;
       }
       if(profile){
-        token.username = profile.username || profile.name?.[0] || profile.sub;
+        token.username = profile.username || profile.name?.[0] || profile.sub || "";
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
-        session.user.username = (token.username as string) || (token.name as string[])?.[0] || (token.sub as string);
+        session.user.username = (token.username as string)
+          || (Array.isArray(token.name) ? token.name[0] : "")
+          || (token.sub as string)
+          || "";
         session.accessToken = token.accessToken as string;
       }
       return session;

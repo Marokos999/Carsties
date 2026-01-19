@@ -12,13 +12,16 @@ import AuctionCreatedToast from '../components/AuctionCreatedToast';
 import AuctionFinishedToast from '../components/AuctionFinishedToast';
 import { HubConnectionBuilder } from '@microsoft/signalr/dist/esm/HubConnectionBuilder';
 import { getDetailedViewData } from '../actions/auctionActions';
+import { useSession } from 'next-auth/react';
 
 type Props = {
     children: ReactNode
     user: User | null
 }
 
-export default function SignalRProvider({ children, user }: Props) {
+export default function SignalRProvider({ children}: Props) {
+    const session = useSession();
+    const user = session.data?.user;
     const connection = useRef<HubConnection | null>(null);
     const setCurrentPrice = useAuctionState(state => state.setCurrentPrice);
     const addBid = useBidStore(state => state.addBid);
