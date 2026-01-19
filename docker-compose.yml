@@ -94,6 +94,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
+      - IssuerUri=http://localhost:5000
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Username=postgres;Password=postgrespw;Database=identity
     ports:
       - "5000:80"
@@ -156,9 +157,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-     - AUTH_SECRET="8oyGHVIKEZncQqBFj92Y3xiRZVW11sV5weBT3GlFJA0=" 
-     - API_URL=http://gateway-svc/ 
-     - ID_URL=http://identity-svc/
+     - AUTH_SECRET="8oyGHVIKEZncQqBFj92Y3xiRZVW11sV5weBT3GlFJA0="
+     - API_URL=http://gateway-svc/
+     - ID_URL=http://localhost:5000
+     - ID_URL_INTERNAL=http://identity-svc
      - AUTH_URL=http://localhost:3000
      - AUTH_URL_INTERNAL=http://web-app:3000
 volumes:
